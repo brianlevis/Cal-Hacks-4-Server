@@ -5,6 +5,7 @@ listeners = {}
 
 LISTENER_SCRIPT = 'listener/listener.py'
 
+
 def get_tweets(request):
     print("Get event: " + str(request))
     if request.method != "GET" or ('region' not in request.GET) or ('event' not in request.GET):
