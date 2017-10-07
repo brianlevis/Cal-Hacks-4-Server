@@ -3,6 +3,7 @@ import subprocess
 
 listeners = {}
 
+LISTENER_SCRIPT = 'listener/listener.py'
 
 def get_tweets(request):
     print("Get event: " + str(request))
@@ -28,7 +29,7 @@ def add_tracker(request):
         HttpResponseBadRequest("Region " + region + " already exists.")
 
     latitude, longitude = request.GET['latitude'], request.GET['longitude']
-    p = subprocess.Popen(['listener.py', '--region', region, '--latitude', latitude, '--longitude', longitude],
+    p = subprocess.Popen([LISTENER_SCRIPT, '--region', region, '--latitude', latitude, '--longitude', longitude],
                          stdin=subprocess.PIPE,
                          stdout=subprocess.PIPE,
                          stderr=subprocess.STDOUT)
