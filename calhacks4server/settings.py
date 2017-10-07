@@ -30,7 +30,7 @@ SECRET_KEY = keys['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['turret.brianlevis.com']
+ALLOWED_HOSTS = ['turret.brianlevis.com', '127.0.0.1']
 
 
 # Application definition
