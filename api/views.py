@@ -1,7 +1,7 @@
 from django.http import JsonResponse, HttpResponseBadRequest
 import subprocess, sys
 
-locations = {}
+listeners = {}
 
 class Tracker:
     def __init__(self, region_name, lat, lon):
@@ -28,13 +28,13 @@ def add_tracker(request):
         return HttpResponseBadRequest("Request should be a GET request with fields region, latitude, and longitude.")
     try:
         region_name = request.GET['region']
-        if region_name in locations:
+        if region_name in listeners:
             HttpResponseBadRequest("Region " + region_name + " already exists.")
         lat, lon = request.GET['latitude'], request.GET['longitude']
-        p = subprocess.Popen([sys.executable, 'tracker.py'],
+        p = subprocess.Popen([sys.executable, 'listener.py'],
                              stdout=subprocess.PIPE,
                              stderr=subprocess.STDOUT)
-        locations[region_name] = p
+        listeners[region_name] = p
     except KeyError:
         return HttpResponseBadRequest("Request should be a GET request with fields region, latitude, and longitude.")
 
@@ -45,10 +45,10 @@ def remove_tracker(request):
         return HttpResponseBadRequest("Request should be a GET request with fields region_name.")
     try:
         region_name = request.GET['region']
-        if region_name in locations:
+        if region_name in listeners:
             HttpResponseBadRequest("Region " + region_name + " already exists.")
         lat, lon = request.GET['latitude'], request.GET['longitude']
-        p = subprocess.Popen([sys.executable, 'tracker.py'],
+        p = subprocess.Popen([sys.executable, 'listener.py'],
                              stdout=subprocess.PIPE,
                              stderr=subprocess.STDOUT)
         locations[region_name] = p
