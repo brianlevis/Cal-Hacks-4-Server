@@ -1,7 +1,8 @@
 from django.http import JsonResponse, HttpResponseBadRequest
-import subprocess, sys
+import subprocess
 
 listeners = {}
+
 
 def get_tweets(request):
     print("Get event: " + str(request))
@@ -9,11 +10,13 @@ def get_tweets(request):
         return HttpResponseBadRequest("Request should be a GET request with fields region and event.")
     return JsonResponse({'hell yeah?': 'HELL YEAH!!!'})
 
+
 def get_events(request):
     print("Get data: " + str(request))
     if request.method != "GET" or ('event' not in request.GET):
         return HttpResponseBadRequest("Request should be a GET request with field region.")
     return JsonResponse({'hell yeah?': 'HELL YEAH!!!'})
+
 
 def add_tracker(request):
     print("Add Tracker: " + str(request))
