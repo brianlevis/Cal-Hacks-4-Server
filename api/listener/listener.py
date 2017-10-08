@@ -37,5 +37,4 @@ def get_input():
 
 # Control Loop
 while True:
-
-    pass
+    break

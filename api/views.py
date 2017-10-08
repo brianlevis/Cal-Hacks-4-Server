@@ -1,9 +1,11 @@
+import hashlib
+
 from django.http import JsonResponse, HttpResponseBadRequest
 import subprocess
 
 listeners = {}
 
-LISTENER_SCRIPT = 'listener/listener.py'
+LISTENER_SCRIPT = 'api/listener/listener.py'
 
 
 def get_events(request):
@@ -20,6 +22,11 @@ def get_events(request):
             'name': 'Cal Hacks 4.0',
             'latitude': 37.870642,
             'longitude': -122.251471,
+        },
+        'Steal CodeBase\'s Canopy': {
+            'name': 'Steal CodeBase\'s Canopy',
+            'latitude': 37.865418,
+            'longitude': -122.256740,
         },
         'Water Polo Championship': {
             'name': 'Water Polo Championship',
@@ -39,19 +46,24 @@ def get_tweets(request):
 
 def add_tracker(request):
     print("Add Tracker: " + str(request))
-    if request.method != "GET" or 'id' not in request.GET:
+    if request.method != "GET" or ('latitude' not in request.GET) or ('longitude' not in request.GET):
         return HttpResponseBadRequest("Request should be a GET request with fields id, latitude, and longitude.")
 
-    region = request.GET['region']
-    if region in listeners:
-        HttpResponseBadRequest("Region " + region + " already exists.")
-
     latitude, longitude = request.GET['latitude'], request.GET['longitude']
-    p = subprocess.Popen([LISTENER_SCRIPT, '--region', region, '--latitude', latitude, '--longitude', longitude],
-                         stdin=subprocess.PIPE,
-                         stdout=subprocess.PIPE,
-                         stderr=subprocess.STDOUT)
-    listeners[region] = p
+
+    try:
+        float(request.GET['latitude'])
+        float(request.GET['longitude'])
+    except ValueError:
+        return HttpResponseBadRequest("Could not convert latitude and longitude to floats.")
+
+    region = hashlib.md5((latitude + longitude).encode('utf-8')).hexdigest()
+    # p = subprocess.Popen([LISTENER_SCRIPT, '--region', region, '--latitude', latitude, '--longitude', longitude],
+    #                      stdin=subprocess.PIPE,
+    #                      stdout=subprocess.PIPE,
+    #                      stderr=subprocess.STDOUT)
+    # listeners[region] = p
+    return JsonResponse({'trackerId': region})
 
 
 def remove_tracker(request):
