@@ -46,8 +46,8 @@ def get_tweets(request):
 
 def add_tracker(request):
     print("Add Tracker: " + str(request))
-    if request.method != "GET" or ('latitude' not in request.GET) or ('longitude' not in request.GET)
-                             or ('token' not in request.GET):
+    if request.method != "GET" or ('latitude' not in request.GET) or ('longitude' not in request.GET) or \
+            ('token' not in request.GET):
         return HttpResponseBadRequest("Request should be a GET request with fields id, latitude, longitude, token, and user.")
 
     latitude, longitude = request.GET['latitude'], request.GET['longitude']

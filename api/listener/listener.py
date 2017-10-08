@@ -65,11 +65,11 @@ while check_lifetime():
         reset_lifetime()
 
     new_tweets = twitter_stream.get_filtered_tweets_by_location(latitude, longitude, DISTANCE, KEYWORD_LISTS)
-    try:
-        response = PushClient().publish(
+    response = PushClient().publish(
             PushMessage(to=token,
                         body="New tweet",
                         data=new_tweets[0]))
+
 
     delta = time.time() - start
     if delta < 120:
