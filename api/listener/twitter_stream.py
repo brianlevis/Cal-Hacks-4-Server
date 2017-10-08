@@ -1,8 +1,7 @@
 from TwitterAPI import TwitterAPI
 
 KEYWORD_LISTS = [
-    ['protest', 'rally', 'controversial speaker'],
-    ['game', 'football']
+['Berkeley']
 ]
 """
 
@@ -40,14 +39,16 @@ def get_filtered_tweets_by_location(latitude, longitude, distance, keywords=[]):
 def groupTweets():
     classify = {}
     for key in KEYWORD_LISTS:
-        tweets = get_filtered_tweets_by_location(37.7749, -122.4194, 10, key)
-        for t in tweets:
-            if t['entities']['hashtags'] != None:
-                for hashtag in t['entities']['hashtags']:
-                    if classify[hashtag['text']] == None:
-                        classify[hashtag['text']] = [t]
-                    else:
-                        classify[hashtag['text']].append(t)
+
+        tweets = get_filtered_tweets_by_location(37.8719, -122.2585, 10, key)
+        if tweets is not None:
+            for t in tweets:
+                if t['entities']['hashtags'] != None:
+                    for hashtag in t['entities']['hashtags']:
+                        if classify[hashtag['text']] == None:
+                            classify[hashtag['text']] = [t]
+                        else:
+                            classify[hashtag['text']].append(t)
     return classify
 test = groupTweets()
 print(test)
