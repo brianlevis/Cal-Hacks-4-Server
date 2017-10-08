@@ -51,11 +51,19 @@ def get_filtered_tweets_by_location(latitude, longitude, distance, keywords):
     stream = get_local_stream(latitude, longitude, distance)
     tweets = []
     count = 0
+    import time
+    start = time.time()
+    print("count:", 0)
     for response in stream:
-        if count > 5:
+        print("count:", count)
+        time_taken = time.time() - start
+        start = time.time()
+        time.sleep(max(5, time_taken * 0.90))
+        if count > 100:
             break
         tweets += [response]
         count += 1
+        print(response)
 
     return tweets
 
