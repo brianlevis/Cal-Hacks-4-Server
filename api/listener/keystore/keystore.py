@@ -1,6 +1,9 @@
+import os
 import pickle
 
-with open('keystore/keystore', 'rb') as handle:
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+with open(BASE_DIR + '/keystore/keystore', 'rb') as handle:
     secret = pickle.load(handle)
 
 
