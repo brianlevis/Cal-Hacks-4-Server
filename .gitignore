@@ -102,10 +102,5 @@ ENV/
 
 
 .idea/
-/keystore/key_gen.py
 /db.sqlite3
 db.sqlite3
-keystore/key_gen.py
-keystore
-!/api/keystore/keystore.py
-!/keystore/keystore.py
