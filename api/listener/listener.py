@@ -59,9 +59,9 @@ while check_lifetime():
         reset_lifetime()
 
     new_tweets = twitter_stream.get_filtered_tweets_by_location(latitude, longitude, DISTANCE, KEYWORD_LISTS)
-    sys.stderr(new_tweets.json())
+    print(new_tweets)
 
     delta = time.time() - start
-    if delta < 5:
+    if delta < 120:
         time.sleep(math.ceil(delta))
     start = time.time()

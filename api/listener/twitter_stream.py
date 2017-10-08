@@ -1,3 +1,4 @@
+import pickle
 from TwitterAPI import TwitterAPI
 
 from api.listener.keystore.keystore import get_keys
@@ -15,9 +16,11 @@ keys = get_keys('twitter')
 twitAPI = TwitterAPI(keys['consumerKey'], keys['consumerSecret'], keys['tokenKey'], keys['tokenSecret'])
 
 
-def real_time_stream_by_city(city_box_coordinates, keywords=[]):
+def real_time_stream_by_city(city_box_coordinates):
+    # key_list = [item for sublist in keywords for item in sublist]
+    # keyword_str = ','.join(key_list)
     # function that collects all tweets from a city/keyword set within a 24 hour time period.
-    locational_tweets = twitAPI.request('statuses/filter', params={'locations': city_box_coordinates, 'track': keywords})
+    locational_tweets = twitAPI.request('statuses/filter', params={'locations': city_box_coordinates})
     return locational_tweets
 
 
@@ -29,8 +32,7 @@ def geo_search_valid_locations(latitude, longitude, distance):
     return places.json()
 
 
-def get_filtered_tweets_by_location(latitude, longitude, distance, keywords=[]):
-    # returns a list of tweet objects by location and distance of your setting
+def get_local_stream(latitude, longitude, distance):
     valid_locations = geo_search_valid_locations(latitude, longitude, distance)
     box_set_coordinates = valid_locations['result']['places'][0]['bounding_box']['coordinates'][0]
     max_lat = min_lat = box_set_coordinates[0][0]
@@ -41,8 +43,21 @@ def get_filtered_tweets_by_location(latitude, longitude, distance, keywords=[]):
         max_lon = max(coord[1], max_lon)
         min_lon = min(coord[1], min_lon)
     coordinates = str(min_lat) + ',' + str(min_lon) + ',' + str(max_lat) + ',' + str(max_lon)
-    return real_time_stream_by_city(coordinates, keywords)
+    return real_time_stream_by_city(coordinates).get_iterator()
 
+
+def get_filtered_tweets_by_location(latitude, longitude, distance, keywords):
+    # returns a list of tweet objects by location and distance of your setting
+    stream = get_local_stream(latitude, longitude, distance)
+    tweets = []
+    count = 0
+    for response in stream:
+        if count > 5:
+            break
+        tweets += [response]
+        count += 1
+
+    return tweets
 
 #
 # def group_tweets():
