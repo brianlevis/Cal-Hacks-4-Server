@@ -13,10 +13,7 @@ keywords: list-like of strings
 return a list-like of tweets
 
 """
-consumerKey = "YOBQnrulcSHFtEiJnnWiDaVhG"
-consumerSecret = "zQRNJ2J8hw1kccQO1Sb3X5bhbiVAFph6KSJr46d6cbZqP4rTZR"
-tokenKey = "814761966723960832-EOKXXImj9OA8sNz51dasntrhbeReSsG"
-tokenSecret = "CoKgSROWgP1Jxbql5oEtHnzt3Tt9jDJ7SAMfmJdsAOiJL"
+
 twitAPI = TwitterAPI(consumerKey,consumerSecret, tokenKey, tokenSecret)
 def realtime_stream_by_city(cityBoxCoordinates, keywords=[]):
     #function that collects all tweets from a city/keyword set within a 24 hour time period.
