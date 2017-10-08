@@ -46,10 +46,12 @@ def get_tweets(request):
 
 def add_tracker(request):
     print("Add Tracker: " + str(request))
-    if request.method != "GET" or ('latitude' not in request.GET) or ('longitude' not in request.GET):
-        return HttpResponseBadRequest("Request should be a GET request with fields id, latitude, and longitude.")
+    if request.method != "GET" or ('latitude' not in request.GET) or ('longitude' not in request.GET)
+                             or ('token' not in request.GET):
+        return HttpResponseBadRequest("Request should be a GET request with fields id, latitude, longitude, token, and user.")
 
     latitude, longitude = request.GET['latitude'], request.GET['longitude']
+    token = request.GET['token']
 
     try:
         float(request.GET['latitude'])
@@ -58,7 +60,10 @@ def add_tracker(request):
         return HttpResponseBadRequest("Could not convert latitude and longitude to floats.")
 
     region = hashlib.md5((latitude + longitude).encode('utf-8')).hexdigest()
-    p = subprocess.Popen(['python3', LISTENER_SCRIPT, '--region', region, '--latitude', latitude, '--longitude', longitude],
+    p = subprocess.Popen(['python3', LISTENER_SCRIPT, '--region', region,
+                                                      '--latitude', latitude,
+                                                      '--longitude', longitude,
+                                                      '--token', token],
                          stdin=subprocess.PIPE,
                          stdout=subprocess.PIPE,
                          stderr=subprocess.STDOUT)

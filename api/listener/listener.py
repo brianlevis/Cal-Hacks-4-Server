@@ -9,14 +9,20 @@ import select
 from api.listener import twitter_stream
 from api.listener.keystore import keystore
 
+from exponent_server_sdk import PushClient
+from exponent_server_sdk import PushMessage
+
 # Command Line Arguments
 parser = argparse.ArgumentParser()
 parser.add_argument('--region', dest='region', action='store', required=True)
 parser.add_argument('--latitude', dest='latitude', action='store', required=True)
 parser.add_argument('--longitude', dest='longitude', action='store', required=True)
+parser.add_argument('--token', dest='token', action='store', required=True)
+parser.add_argument('--user', dest='user', action='store', required=True)
 # region, latitude, longitude = parser.parse_args()
 args = parser.parse_args()
 region, latitude, longitude = args.region, args.latitude, args.longitude
+token, user = args.token, args.user
 # Constants
 SECONDS_TO_LIVE = 600
 # This is how you get twitter keys!
@@ -59,7 +65,11 @@ while check_lifetime():
         reset_lifetime()
 
     new_tweets = twitter_stream.get_filtered_tweets_by_location(latitude, longitude, DISTANCE, KEYWORD_LISTS)
-    print(new_tweets)
+    try:
+        response = PushClient().publish(
+            PushMessage(to=token,
+                        body="New tweet",
+                        data=new_tweets[0]))
 
     delta = time.time() - start
     if delta < 120:
