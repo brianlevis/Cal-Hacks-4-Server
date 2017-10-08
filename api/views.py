@@ -58,11 +58,11 @@ def add_tracker(request):
         return HttpResponseBadRequest("Could not convert latitude and longitude to floats.")
 
     region = hashlib.md5((latitude + longitude).encode('utf-8')).hexdigest()
-    # p = subprocess.Popen([LISTENER_SCRIPT, '--region', region, '--latitude', latitude, '--longitude', longitude],
-    #                      stdin=subprocess.PIPE,
-    #                      stdout=subprocess.PIPE,
-    #                      stderr=subprocess.STDOUT)
-    # listeners[region] = p
+    p = subprocess.Popen(['python3', LISTENER_SCRIPT, '--region', region, '--latitude', latitude, '--longitude', longitude],
+                         stdin=subprocess.PIPE,
+                         stdout=subprocess.PIPE,
+                         stderr=subprocess.STDOUT)
+    listeners[region] = p
     return JsonResponse({'trackerId': region})
 
 
@@ -70,4 +70,4 @@ def remove_tracker(request):
     print("Remove Tracker: " + str(request))
     if request.method != "GET":
         return HttpResponseBadRequest("Request should be a GET request with fields region_name.")
-    return JsonResponse({'hell yeah?': 'HELL YEAH!!!'})
+    return JsonResponse({'status': 'success'})

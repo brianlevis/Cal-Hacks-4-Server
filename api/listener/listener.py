@@ -2,10 +2,9 @@ import argparse
 import datetime
 import sys
 
-import keystore
-
-
 # Command Line Arguments
+from api.listener.keystore import keystore
+
 parser = argparse.ArgumentParser()
 parser.add_argument('--region', dest='region', action='store', required=True)
 parser.add_argument('--latitude', dest='latitude', action='store', required=True)
