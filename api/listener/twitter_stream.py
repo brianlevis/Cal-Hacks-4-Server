@@ -9,8 +9,9 @@ return a list-like of tweets
 """
 def realtime_stream_by_city(cityBoxCoordinates, keywords=[]):
     #function that collects all tweets from a city/keyword set within a 24 hour time period.
+    #your return type needs to have a get_iterator() added to the return type to actually index it 
     locationalTweets = twitAPI.request('statuses/filter', {'locations':cityBoxCoordinates , 'track': keywords })
-    return locationalTweets.get_iterator()
+    return locationalTweets
 
 
 def geoSearch_valid_locations(latitude, longitude, distance):
