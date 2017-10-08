@@ -1,7 +1,8 @@
 from TwitterAPI import TwitterAPI
+import json
 
 KEYWORD_LISTS = [
-['Berkeley']
+['Cal'], ['Washington', 'Huskies']
 ]
 """
 
@@ -19,7 +20,6 @@ tokenSecret = "CoKgSROWgP1Jxbql5oEtHnzt3Tt9jDJ7SAMfmJdsAOiJL"
 twitAPI = TwitterAPI(consumerKey,consumerSecret, tokenKey, tokenSecret)
 def realtime_stream_by_city(cityBoxCoordinates, keywords=[]):
     #function that collects all tweets from a city/keyword set within a 24 hour time period.
-    #your return type needs to have a get_iterator() added to the return type to actually index it 
     locationalTweets = twitAPI.request('statuses/filter', {'locations':cityBoxCoordinates , 'track': keywords })
     return locationalTweets
 
@@ -39,17 +39,18 @@ def get_filtered_tweets_by_location(latitude, longitude, distance, keywords=[]):
 
 def groupTweets():
     classify = {}
-    for key in KEYWORD_LISTS:
-
-        tweets = get_filtered_tweets_by_location(37.8719, -122.2585, 10, key)
-        if tweets is not None:
-            for t in tweets:
-                if t['entities']['hashtags'] != None:
-                    for hashtag in t['entities']['hashtags']:
-                        if classify[hashtag['text']] == None:
-                            classify[hashtag['text']] = [t]
-                        else:
-                            classify[hashtag['text']].append(t)
+    flat_list = [item for sublist in KEYWORD_LISTS for item in sublist]
+    tweets = get_filtered_tweets_by_location(37.8719, -122.2585, 10, flat_list)
+    if tweets is not None:
+        for t in tweets:
+            if t['entities']['hashtags'] != None:
+                for hashtag in t['entities']['hashtags']:
+                    if classify[hashtag['text']] == None:
+                        classify[hashtag['text']] = [t]
+                    else:
+                        classify[hashtag['text']].append(t)
     return classify
-test = groupTweets()
-print(test)
+# test = groupTweets()
+# print(test)
+flat_list = [item for sublist in KEYWORD_LISTS for item in sublist]
+print(flat_list)
