@@ -2,8 +2,7 @@ import argparse
 import datetime
 import sys
 
-import keystore
-
+from keystore import keystore
 
 # Command Line Arguments
 parser = argparse.ArgumentParser()
