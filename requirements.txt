@@ -1,4 +1,4 @@
-Django==1.11.6
+django ~> 1.11.15
 TwitterAPI==2.4.6
 certifi==2017.7.27.1
 chardet==3.0.4
